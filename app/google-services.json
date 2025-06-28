@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "542513810357",
+    "project_id": "cs426-midterm-ltdsword-solo",
+    "storage_bucket": "cs426-midterm-ltdsword-solo.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:542513810357:android:94c6a4d33fde3500d4e7fc",
+        "android_client_info": {
+          "package_name": "com.example.codecup"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLPUuJ_oX9VuaaFrHLyw57V2WHZDuJ8lw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

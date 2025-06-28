@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome back"
+        android:fontFamily="@font/roboto_bold"
+        android:textSize="30sp"
+        android:padding="16dp"/>
+
+    <EditText
+        android:id="@+id/emailEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Username"
+        android:background="@drawable/border"
+        android:padding="12dp"
+        android:fontFamily="@font/roboto_medium"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/passwordEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:background="@drawable/border"
+        android:padding="12dp"
+        android:inputType="textPassword"
+        android:fontFamily="@font/roboto_medium"
+        android:layout_marginTop="12dp" />
+
+    <Button
+        android:id="@+id/loginButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:fontFamily="@font/sfheavy"
+        android:backgroundTint="@color/green"
+        android:layout_marginTop="16dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/forgotPasswordText"
+            android:textStyle="bold"
+            android:textColor="@color/purple_500"
+            android:text="Forgot Password?"
+            android:paddingTop="16dp" />
+
+        <TextView
+            android:id="@+id/textViewRegister"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:gravity="end|center_vertical"
+            android:text="Have no account? Register"
+            android:textColor="@color/purple_500"
+            android:textStyle="bold"
+            android:paddingTop="16dp" />
+    </LinearLayout>
+</LinearLayout>
