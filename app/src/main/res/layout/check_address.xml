@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please type in the address\nyou want to pick up:"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/poppins"
+        android:textSize="14sp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(The address must contain the house number, \nstreet name, distict and city.)"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/poppins"
+        android:textSize="14sp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center" />
+
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_rectangle_trans"
+        android:hint="Address"
+        android:id="@+id/address"
+        android:textSize="14sp"
+        android:padding="8dp"
+        android:layout_gravity="center"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(Ex: 227 Nguyen Van Cu Street, \nDistrict 5, Ho Chi Minh City)"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/poppins"
+        android:textSize="14sp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:id="@+id/clickAddress"
+        android:text="Click here if you want to use your address"
+        android:fontFamily="@font/poppinsmed"
+        android:textSize="14sp"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/purple_500"
+        android:gravity="center" />
+
+</LinearLayout>

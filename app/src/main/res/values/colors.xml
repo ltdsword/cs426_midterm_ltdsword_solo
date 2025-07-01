@@ -4,11 +4,13 @@
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="blue">#3232a8</color>
+    <color name="dark_blue">#181D2D</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="sky">#43a18c</color>
     <color name="black">#FF000000</color>
     <color name="grey">#808080</color>
+    <color name="grey_light">#E0E0E0</color>
     <color name="white">#FFFFFFFF</color>
     <color name="green">#32a862</color>
     <color name="greener">#3aa832</color>
@@ -17,4 +19,5 @@
     <color name="red">#a85132</color>
     <color name="redder">#a83e32</color>
     <color name="pink">#FFC0CB</color>
+    <color name="brown">#964B00</color>
 </resources>

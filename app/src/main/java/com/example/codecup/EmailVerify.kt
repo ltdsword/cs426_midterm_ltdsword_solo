@@ -1,4 +1,4 @@
-package com.example.cuoi
+package com.example.codecup
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Handler
@@ -37,6 +37,8 @@ class EmailVerify {
         val apiKey = (context.applicationContext as MyApplication).sharedPreferences
             .getString("API_KEY", null) ?: return
 
+        Log.d("Email", "Api Key: ${apiKey.substring(0, 10)}")
+
         val fromEmail = "ltdsword12@gmail.com"
         val emailBody = """
         <h4>Hello,</h4>
@@ -71,11 +73,13 @@ class EmailVerify {
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: okhttp3.Call, e: IOException) {
+                Log.e("Email", "Fail to send email")
                 e.printStackTrace()
             }
 
             override fun onResponse(call: okhttp3.Call, response: Response) {
                 val responseBody = response.body?.string() ?: "No response body"
+                Log.d("Email", "Response: $responseBody")
             }
         })
     }

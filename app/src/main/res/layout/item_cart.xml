@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="12dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:backgroundTint="#F7F8FB"
+    android:elevation="4dp"
+    android:radius="16dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Delete button (background) -->
+        <ImageButton
+            android:id="@+id/deleteButton"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:background="@drawable/round_border_red"
+            android:contentDescription="Delete"
+            android:src="@drawable/delete"
+            android:scaleType="center"
+            android:padding="12dp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/foregroundLayout"
+            android:background="#F7F8FB"
+            android:padding="12dp">
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_coffee_foreground" />
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@id/image"
+                android:fontFamily="@font/poppins"
+                android:text="Americano"
+                android:textColor="@color/dark_blue"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/name"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@id/image"
+                android:fontFamily="@font/poppins"
+                android:text="single | iced | medium | full ice"
+                android:textColor="@color/grey"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/qty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/details"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@id/image"
+                android:fontFamily="@font/poppinsbold"
+                android:text="x 1"
+                android:textColor="@color/dark_blue"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/poppins"
+                android:text="$3.00"
+                android:textColor="@color/dark_blue"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </FrameLayout>
+</androidx.cardview.widget.CardView>
+

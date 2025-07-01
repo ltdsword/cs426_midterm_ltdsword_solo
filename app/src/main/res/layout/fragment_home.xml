@@ -43,6 +43,7 @@
                     android:text="Anderson"
                     android:textStyle="bold"
                     android:textColor="#1C1C1C"
+                    android:id="@+id/nameText"
                     android:textSize="18sp"
                     android:fontFamily="@font/poppins"
                     android:layout_width="wrap_content"
@@ -75,37 +76,43 @@
             android:layout_marginTop="8dp"
             android:elevation="2dp">
 
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="8dp" >
+                android:paddingBottom="8dp">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins"
                     android:text="Loyalty card"
                     android:textColor="#FFFFFF"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/poppins" />
+                    android:textSize="14sp" />
 
 
                 <TextView
-                    android:text="4 / 8"
-                    android:fontFamily="@font/poppins"
-                    android:layout_alignParentEnd="true"
-                    android:textColor="#FFFFFF"
-                    android:textSize="14sp"
+                    android:id="@+id/ltyid"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:fontFamily="@font/poppins"
+                    android:text="4 / 8"
+                    android:layout_marginEnd="16dp"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp" />
 
             </RelativeLayout>
-
-
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:background="@drawable/round_border"
+                android:paddingVertical="15dp"
+                android:paddingStart="11dp"
+                android:paddingEnd="10dp"
                 android:gravity="center_vertical">
 
                 <!-- Icons (replace with loop in code if dynamic) -->
@@ -114,57 +121,65 @@
                     android:layout_weight="1"
                     android:layout_height="36dp"
                     android:layout_marginEnd="4dp"
+                    android:id="@+id/c1"
                     android:src="@drawable/baseline_coffee_24"
-                    app:tint="@color/white" />
+                    />
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="36dp"
                     android:layout_marginEnd="4dp"
+                    android:id="@+id/c2"
                     android:src="@drawable/baseline_coffee_24"
-                    app:tint="@color/white" />
+                    />
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="36dp"
                     android:layout_marginEnd="4dp"
+                    android:id="@+id/c3"
                     android:src="@drawable/baseline_coffee_24"
-                    app:tint="@color/white" />
+                    />
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="36dp"
                     android:layout_marginEnd="4dp"
+                    android:id="@+id/c4"
                     android:src="@drawable/baseline_coffee_24"
-                    app:tint="@color/white" />
+                    />
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="36dp"
                     android:layout_marginEnd="4dp"
+                    android:id="@+id/c5"
                     android:src="@drawable/baseline_coffee_24"
-                    app:tint="@color/white" />
+                    />
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="36dp"
                     android:layout_marginEnd="4dp"
+                    android:id="@+id/c6"
                     android:src="@drawable/baseline_coffee_24"
-                    app:tint="@color/white" />
+                    />
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="36dp"
                     android:layout_marginEnd="4dp"
+                    android:id="@+id/c7"
                     android:src="@drawable/baseline_coffee_24"
-                    app:tint="@color/white" />
+                    />
                 <ImageView
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="36dp"
                     android:layout_marginEnd="4dp"
+                    android:id="@+id/c8"
                     android:src="@drawable/baseline_coffee_24"
-                    app:tint="@color/white" />
+                    />
             </LinearLayout>
         </LinearLayout>
 

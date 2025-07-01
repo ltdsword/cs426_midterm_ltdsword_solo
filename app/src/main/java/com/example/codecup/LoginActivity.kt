@@ -1,4 +1,4 @@
-package com.example.cuoi
+package com.example.codecup
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -20,6 +20,7 @@ import com.example.codecup.MainActivity
 import com.example.codecup.R
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
@@ -108,6 +109,8 @@ class LoginActivity : AppCompatActivity() {
                         val editor = sharedPreferences.edit()
                         editor.putBoolean("isLoggedIn", true) // Set login state
                         editor.putString("username", username)
+                        val profileJson = Gson().toJson(profile)
+                        editor.putString("profile", profileJson)
                         editor.apply()
                         // Navigate to the main activity
                         startActivity(Intent(this@LoginActivity, MainActivity::class.java))

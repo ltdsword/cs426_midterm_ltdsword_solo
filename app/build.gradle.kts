@@ -1,7 +1,24 @@
+import java.util.Properties
+// Load local.properties once
+val localProperties = Properties().apply {
+    val localPropsFile = rootProject.file("local.properties")
+    if (localPropsFile.exists()) {
+        load(localPropsFile.inputStream())
+    }
+}
+
+val sendgridApiKey = localProperties.getProperty("SENDGRID_API_KEY") ?: ""
+
+fun escapeForJavaString(str: String): String =
+    str.replace("\\", "\\\\").replace("\"", "\\\"")
+
+val escapedSendgridKey = escapeForJavaString(sendgridApiKey)
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.gms.google-services")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -18,7 +35,14 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     buildTypes {
+        debug {
+            buildConfigField("String", "SENDGRID_API_KEY", "\"$escapedSendgridKey\"")
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -43,13 +67,24 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.security.crypto.ktx)
+    implementation(libs.androidx.legacy.support.v4)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.fragment.ktx)
 
+    // to use ViewModel, LiveData, ...
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+
+    // for saving API keys and send email
+    implementation(libs.androidx.security.crypto.ktx)
+    implementation(libs.androidx.security.crypto)
     implementation(libs.androidx.recyclerview)
     implementation (libs.material.v1110)
+
+    // for cropping the image
+    implementation (libs.material)
 
     // for firebase database
     implementation(libs.firebase.database.ktx)
@@ -66,4 +101,11 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.google.firebase.storage.ktx)
+
+    // for sending email
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.v490)
+
+    // for converting profile to JSON and JSON back to Profile
+    implementation(libs.gson)
 }

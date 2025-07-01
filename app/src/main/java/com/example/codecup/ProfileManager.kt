@@ -1,10 +1,12 @@
-package com.example.cuoi
+package com.example.codecup
 
+import android.content.Context
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -96,7 +98,20 @@ class ProfileManagement {
             }
     }
 
+    fun getProfileFromLocal(context: Context): Profile {
+        val data = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+        val json = data.getString("profile", null)
+        val profile = if (json != null) {
+            Gson().fromJson(json, Profile::class.java)
+        } else {
+            Profile()
+        }
+
+        return profile
+    }
+
     fun saveProfile(profile: Profile) {
+        // save profile to Firebase
         val username = profile.name
         val db = FirebaseFirestore.getInstance()
         db.collection("users").document(username).set(profile)
@@ -106,6 +121,16 @@ class ProfileManagement {
             .addOnFailureListener { e ->
                 Log.e("Firestore", "Error saving profile", e)
             }
+    }
+
+    fun saveProfile(profile: Profile, context: Context) {
+        val data = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+        val editor = data.edit()
+        val profileJson = Gson().toJson(profile)
+        editor.putString("profile", profileJson)
+        editor.putString("username", profile.name)
+        editor.apply()
+        saveProfile(profile)
     }
 
     fun deleteUsername(username: String) {

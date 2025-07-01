@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:text="An OTP has been sent to your email."
-        android:fontFamily="@font/roboto_bold"
+        android:fontFamily="@font/sfbold"
         android:textSize="16sp" />
 
     <TextView
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="Please enter the verification code."
-        android:fontFamily="@font/roboto_bold"
+        android:fontFamily="@font/sfbold"
         android:textSize="16sp" />
 
     <EditText
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:hint="Code"
-        android:fontFamily="@font/roboto_medium"
+        android:fontFamily="@font/poppinsmed"
         android:textSize="16sp"
         android:layout_marginTop="15dp"
         android:gravity="center"
@@ -41,14 +41,14 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="8dp"
         android:text="Note: The code will expire in 5 minutes."
-        android:fontFamily="@font/roboto_bold"
+        android:fontFamily="@font/sfbold"
         android:textSize="15sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Resend email?"
-        android:fontFamily="@font/sfheavy"
+        android:fontFamily="@font/sfbold"
         android:id="@+id/resendEmailButton"
         android:textSize="15sp"
         android:layout_gravity="center_horizontal"

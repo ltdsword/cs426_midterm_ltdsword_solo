@@ -1,23 +1,39 @@
-package com.example.cuoi
+package com.example.codecup
 
+import android.os.Parcelable
 import androidx.annotation.Keep
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Exclude
+import kotlinx.parcelize.Parcelize
 import java.util.Date
 
 @Keep
-data class Coffee(val name: String, val imageResId: Int, var price: Double = 0.00)
+@Parcelize
+data class Coffee(val name: String,
+                  val imageResId: Int,
+                  var qty: Int = 1,
+                  var price: Double = 0.00,
+                  var single: Boolean = true,
+                  var hot: Boolean = true,
+                  var size: Int = 0,
+                  var ice: Int = 0
+                  ): Parcelable
 
 @Keep
-data class Order(val name: String, val price: Int, val qty: Int, val loyaltyPts : Int, val date: Timestamp)
+data class Order(val name: String = "",
+                 val price: Double = 0.00,
+                 val qty: Int = 1,
+                 val loyaltyPts: Int = 30,
+                 val date: Timestamp = Timestamp.now(),
+                 var address: String = "")
 
 @Keep
 data class History(
     var hist: List<Order> = listOf()
     ) {
     @Exclude
-    fun addObject(date: String, name: String, price: Int, qty: Int, ltypts: Int) {
-        hist = hist + Order(name, price, qty, ltypts, Timestamp(Date(date)))
+    fun addObject(name: String, price: Double, qty: Int, ltypts: Int, address: String) {
+        hist = hist + Order(name, price, qty, ltypts, Timestamp.now(), address)
     }
 
     @Exclude
@@ -37,10 +53,12 @@ data class Profile(
     var password: String = "",
     var age: Int = 0,
     var phoneNumber: String = "",
+    var address: String = "",
     var email: String = "",
     var history: History = History(),
+    var ongoing: History = History(),
     val points: Int = 0,
-    val loyaltyPts: Int = 0,
+    var loyaltyPts: Int = 0,
     var avatarUrl: String = "",
     var avatarUrlSmall: String = ""
 )

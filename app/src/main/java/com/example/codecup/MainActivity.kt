@@ -14,10 +14,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.example.cuoi.LoginActivity
-import com.example.cuoi.Profile
-import com.example.cuoi.ProfileManagement
-import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -35,11 +31,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.nav_home)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.nav_home)) { v, insets ->
+//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+//            insets
+//        }
 
         homeIcon = findViewById<ImageButton>(R.id.nav_home)
         rewardsIcon = findViewById<ImageButton>(R.id.nav_rewards)
@@ -68,8 +64,6 @@ class MainActivity : AppCompatActivity() {
             }
             email = profile.email
 
-            setContentView(R.layout.activity_main)
-
             // Load the default fragment
             loadFragment(HomeFragment())
             setSelectedFragment(HomeFragment(), homeIcon)
@@ -81,19 +75,19 @@ class MainActivity : AppCompatActivity() {
                 setSelectedFragment(RewardFragment(), rewardsIcon)
             }
             orderIcon.setOnClickListener {
-                setSelectedFragment(ProfileFragment(), orderIcon)
+                setSelectedFragment(OrderFragment(), orderIcon)
             }
         }
     }
 
     private fun loadFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, fragment)
+            .replace(R.id.fragment_container, fragment)
             .commit()
     }
     private fun setSelectedFragment(fragment: Fragment, selectedButton: ImageButton) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, fragment)
+            .replace(R.id.fragment_container, fragment)
             .commit()
 
         updateNavSelection(selectedButton)

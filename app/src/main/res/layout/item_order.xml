@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Background Complete Button -->
+        <ImageButton
+            android:id="@+id/completeButton"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:src="@drawable/check"
+            android:textSize="24sp"
+            android:backgroundTint="#d6f6d5"
+            app:tint="@color/green"
+            android:background="@drawable/round_border_red"
+            android:gravity="center"
+            android:layout_marginStart="4dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/foregroundLayout"
+            android:background="#F7F8FB"
+            android:paddingVertical="12dp"
+            android:paddingHorizontal="16dp"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <!-- Order Info and Price -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/orderDateTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="24 June | 12:30 PM"
+                        android:textColor="#B0B0B0"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/poppins" />
+
+                    <!-- Cup Icon and Coffee Name -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/baseline_coffee_24"
+                            app:tint="#2D3E50" />
+
+                        <TextView
+                            android:id="@+id/orderTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Americano"
+                            android:textSize="14sp"
+                            android:textColor="#2D3E50"
+                            android:layout_marginStart="6dp"
+                            android:fontFamily="@font/poppinsmed" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/orderPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="$3.00"
+                    android:textColor="#2D3E50"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/poppinsmed" />
+
+            </RelativeLayout>
+
+            <!-- Address Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:src="@drawable/location"
+                    app:tint="#2D3E50" />
+
+                <TextView
+                    android:id="@+id/orderAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3 Addersion Court Chino Hills, HO56824, United State"
+                    android:layout_marginStart="6dp"
+                    android:textSize="12sp"
+                    android:textColor="#2D3E50"
+                    android:fontFamily="@font/poppins" />
+            </LinearLayout>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#EFEFEF"
+                android:layout_marginTop="12dp" />
+        </LinearLayout>
+    </FrameLayout>
+</androidx.cardview.widget.CardView>
+

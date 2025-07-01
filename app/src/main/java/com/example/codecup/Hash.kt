@@ -1,4 +1,4 @@
-package com.example.cuoi
+package com.example.codecup
 
 import java.security.MessageDigest
 

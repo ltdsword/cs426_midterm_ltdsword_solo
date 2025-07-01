@@ -1,8 +1,9 @@
-package com.example.cuoi
+package com.example.codecup
 
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -53,6 +54,7 @@ class RegisterActivity : AppCompatActivity() {
                         val emailVerify = EmailVerify()
                         if (emailVerify.isValidEmail(email)) {
                             // Send the verification
+                            Log.d("Register", "Sending verification to email $email")
                             emailVerify.showEmailVerificationDialog(this, email) { isVerified ->
                                 if (isVerified) {
                                     // Save user data (SharedPreferences, Database, etc.)

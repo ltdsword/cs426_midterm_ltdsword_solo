@@ -1,4 +1,4 @@
-package com.example.cuoi
+package com.example.codecup
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -52,7 +52,7 @@ class UploadImage {
 
                     val profileManagement = ProfileManagement()
                     profile.avatarUrl = avatarUrl
-                    profileManagement.saveProfile(profile)
+                    profileManagement.saveProfile(profile, context)
 
                     Log.d("Upload", "Avatar loaded successfully, url: $avatarUrl")
                     loadAvatarFromUrl(avatarUrl, context, avatarImageView)
@@ -72,7 +72,7 @@ class UploadImage {
 
                     val profileManagement = ProfileManagement()
                     profile.avatarUrlSmall = avatarUrlSmall
-                    profileManagement.saveProfile(profile)
+                    profileManagement.saveProfile(profile, context)
 
                     Log.d("Upload", "Avatar loaded successfully, url: $avatarUrlSmall")
                     loadAvatarFromUrl(avatarUrlSmall, context, avatarImageView)
