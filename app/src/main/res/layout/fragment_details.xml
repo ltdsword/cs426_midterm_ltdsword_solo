@@ -16,61 +16,59 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:orientation="vertical"
                 android:padding="8dp">
 
-                <!-- Back Icon -->
-                <ImageButton
-                    android:id="@+id/backButton"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginStart="8dp"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/baseline_arrow_back_24"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <!-- Cart Icon -->
-                <ImageView
-                    android:id="@+id/cartButton"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:src="@mipmap/ic_cart_foreground"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <!-- Title -->
-                <TextView
-                    android:id="@+id/titleText"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Details"
-                    android:layout_marginTop="4dp"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:fontFamily="@font/poppinsmed"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/backButton"
-                    app:layout_constraintEnd_toStartOf="@id/cartButton"
-                    app:layout_constraintBottom_toBottomOf="@id/cartButton"
-                    app:layout_constraintHorizontal_bias="0.5" />
+                    android:layout_marginTop="32dp" >
+
+                    <!-- Back Icon -->
+                    <ImageButton
+                        android:id="@+id/backButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="8dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:src="@drawable/baseline_arrow_back_24"
+                        android:layout_centerVertical="true"
+                         />
+
+                    <!-- Cart Icon -->
+                    <ImageView
+                        android:id="@+id/cartButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/buy"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        app:tint="@color/black" />
+
+                    <!-- Title -->
+                    <TextView
+                        android:id="@+id/titleText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Details"
+                        android:layout_centerInParent="true"
+                        android:textSize="18sp"
+                        android:fontFamily="@font/poppinsmed" />
+                </RelativeLayout>
 
                 <!-- Coffee Image -->
                 <ImageView
                     android:id="@+id/coffeeImage"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="150dp"
                     android:src="@mipmap/ic_coffee_foreground"
-                    app:layout_constraintTop_toBottomOf="@id/titleText"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginTop="16dp"
                     />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -421,6 +419,7 @@
                 android:layout_marginHorizontal="32dp"
                 android:layout_marginBottom="32dp"
                 android:text="Add to cart"
+                android:textSize="15sp"
                 android:textColor="@android:color/white"
                 android:backgroundTint="@color/sky"
                 android:fontFamily="@font/poppinsmed" />

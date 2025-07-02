@@ -98,7 +98,7 @@ class OrderPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 class OrderAdapter(
     private val orders: MutableList<Order>,
     private val isOngoing: Boolean,
-    val onSwipeComplete: ((Int) -> Unit)? = null
+    private val onComplete: ((Int) -> Unit)? = null
 ) : RecyclerView.Adapter<OrderAdapter.OrderViewHolder>() {
 
     class OrderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -123,8 +123,12 @@ class OrderAdapter(
         holder.price.text = "$%.2f".format(order.price)
         holder.address.text = order.address
 
-        holder.itemView.findViewById<ImageButton>(R.id.completeButton).setOnClickListener {
-            onSwipeComplete?.invoke(holder.adapterPosition)
+        // Only show the button if it's an ongoing order (i.e. swipe-to-complete enabled)
+        if (isOngoing) {
+            val completeButton = holder.itemView.findViewById<View>(R.id.completeButton)
+            completeButton.setOnClickListener {
+                onComplete?.invoke(holder.adapterPosition)
+            }
         }
     }
 
@@ -139,4 +143,10 @@ class OrderAdapter(
     }
 
     fun getOrderAt(position: Int) = orders[position]
+
+    fun updateData(newList: List<Order>) {
+        orders.clear()
+        orders.addAll(newList)
+        notifyDataSetChanged()
+    }
 }

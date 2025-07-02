@@ -57,7 +57,7 @@ data class Profile(
     var email: String = "",
     var history: History = History(),
     var ongoing: History = History(),
-    val points: Int = 0,
+    var points: Int = 0,
     var loyaltyPts: Int = 0,
     var avatarUrl: String = "",
     var avatarUrlSmall: String = ""

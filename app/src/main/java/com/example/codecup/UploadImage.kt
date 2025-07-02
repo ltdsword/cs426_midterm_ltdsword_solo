@@ -59,8 +59,7 @@ class UploadImage {
                 }
             }
             .addOnFailureListener {
-                Log.d("Upload", "Upload failed")
-                Toast.makeText(context, "Upload failed 62: ${it.message}", Toast.LENGTH_SHORT).show()
+                Log.e("Upload", "Upload image failed")
             }
 
         fileName = "avatars/${profile.name}/profile_pic_small.jpg"
@@ -79,7 +78,7 @@ class UploadImage {
                 }
             }
             .addOnFailureListener {
-                Toast.makeText(context, "Upload failed 81: ${it.message}", Toast.LENGTH_SHORT).show()
+                Log.e("Upload", "Upload small image failed.")
             }
     }
 
@@ -93,7 +92,7 @@ class UploadImage {
             .placeholder(R.mipmap.default_avatar)
             .error(R.mipmap.default_avatar)
             .into(avatarImageView)
-    }
+     }
 
     fun loadDefaultAvatar(context: Context, avatarImageView: ImageView) {
         Glide.with(context)

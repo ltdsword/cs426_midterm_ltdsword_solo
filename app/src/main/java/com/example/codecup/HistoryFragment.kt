@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 
 class HistoryFragment : Fragment() {
 
-    private lateinit var orderAdapter: OrderAdapter
+    lateinit var histAdapter: OrderAdapter
     private lateinit var profile: Profile
+
+    private val profileManagement = ProfileManagement()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -23,9 +25,21 @@ class HistoryFragment : Fragment() {
         val profileManagement = ProfileManagement()
         profile = profileManagement.getProfileFromLocal(requireContext())
 
-        orderAdapter = OrderAdapter(profile.history.hist.toMutableList(), false)
+        histAdapter = OrderAdapter(profile.history.hist.toMutableList(), false)
         val recyclerView = view.findViewById<RecyclerView>(R.id.orderRecyclerView)
-        recyclerView.adapter = orderAdapter
+        recyclerView.adapter = histAdapter
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val updated = profileManagement.getProfileFromLocal(requireContext()).history.hist
+        histAdapter.updateData(updated)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // save the profile data
+        profileManagement.saveProfile(profile, requireContext())
     }
 }

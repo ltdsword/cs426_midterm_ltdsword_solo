@@ -1,7 +1,10 @@
 package com.example.codecup
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.media.Image
+import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -14,9 +17,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.card.MaterialCardView
+import java.io.File
 
 
 class ProfileFragment : Fragment() {
@@ -28,7 +33,6 @@ class ProfileFragment : Fragment() {
 
     private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
-            Log.d("Upload", "Selected image URI: $it")
             uploadImage.uploadImageToFirebase(requireContext(), it, profile, imageView)
         }
     }
@@ -72,7 +76,34 @@ class ProfileFragment : Fragment() {
         changeAvatar.setOnClickListener {
             imagePickerLauncher.launch("image/*")
         }
-        uploadImage.loadUserAvatar(requireContext(), profile, imageView)
+        uploadImage.loadAvatarFromUrl(profile.avatarUrl, requireContext(), imageView)
+
+        val logoutButton = view.findViewById<Button>(R.id.logout)
+        logoutButton.setOnClickListener {
+            AlertDialog.Builder(requireContext())
+                .setTitle("Confirm Logout")
+                .setMessage("Are you sure you want to log out?")
+                .setPositiveButton("Yes") { _, _ ->
+                    // Clear SharedPreferences
+                    val sharedPref = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+                    with(sharedPref.edit()) {
+                        remove("username")
+                        remove("profile")
+                        putBoolean("isLoggedIn", false)
+                        apply()
+                    }
+
+                    // Finish current activity and start LoginActivity
+                    val intent = Intent(requireContext(), LoginActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+
+                    requireActivity().finish()
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+        }
+
 
         val editName = view.findViewById<ImageView>(R.id.editName)
         val editPhone = view.findViewById<ImageView>(R.id.editPhone)
@@ -107,8 +138,22 @@ class ProfileFragment : Fragment() {
             editIcon = editEmail,
             editText = emailText,
             onSave = { newText ->
-                profile.email = newText
-                profileManagement.saveProfile(profile, requireContext())
+                val emailVerify = EmailVerify()
+                if (emailVerify.isValidEmail(newText)) {
+                    emailVerify.showEmailVerificationDialog(requireContext(), newText) { success ->
+                        if (success) {
+                            profile.email = newText
+                            profileManagement.saveProfile(profile, requireContext())
+                        }
+                        else {
+                            Toast.makeText(requireContext(), "Email verification failed.", Toast.LENGTH_SHORT).show()
+                            emailText.setText(profile.email)
+                        }
+                    }
+                }
+                else {
+                    Toast.makeText(requireContext(), "Invalid email format.", Toast.LENGTH_SHORT).show()
+                }
             }
         )
 
@@ -120,6 +165,10 @@ class ProfileFragment : Fragment() {
                 profileManagement.saveProfile(profile, requireContext())
             }
         )
+    }
+
+    private fun scanFile(context: Context, file: File) {
+        MediaScannerConnection.scanFile(context, arrayOf(file.absolutePath), null, null)
     }
 
     private fun setupEditableField(
@@ -137,10 +186,10 @@ class ProfileFragment : Fragment() {
             if (editable) {
                 editIcon.setImageResource(R.drawable.check)
                 editText.requestFocus()
-                showKeyboard(editText)
+                //showKeyboard(editText)
             } else {
                 editIcon.setImageResource(R.drawable.edit)
-                hideKeyboard(editText)
+                //hideKeyboard(editText)
                 onSave(editText.text.toString().trim())
             }
         }
@@ -158,5 +207,11 @@ class ProfileFragment : Fragment() {
     private fun hideKeyboard(view: View) {
         val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // save the profile data
+        profileManagement.saveProfile(profile, requireContext())
     }
 }

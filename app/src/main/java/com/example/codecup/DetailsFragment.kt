@@ -13,11 +13,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import com.google.android.material.card.MaterialCardView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+
 
 class DetailsFragment : Fragment() {
 
@@ -68,19 +65,13 @@ class DetailsFragment : Fragment() {
 
         setupImageUI(view)
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            val data = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
-            username = data.getString("username", null) ?: return@launch
-            val profileTemp = profileManagement.getProfile(username)
-            withContext(Dispatchers.Main) {
-                if (profileTemp != null) {
-                    profile = profileTemp
-                    setupUI(view)
-                } else {
-                    return@withContext
-                }
-            }
-        }
+        profile = profileManagement.getProfileFromLocal(requireContext())
+
+        // load cart
+        cartViewModel.initSharedPrefs(requireContext())
+        cartViewModel.loadCartFromPrefs()
+
+        setupUI(view)
     }
 
     private lateinit var qtyText: TextView
@@ -229,7 +220,7 @@ class DetailsFragment : Fragment() {
         val addToCart = view.findViewById<Button>(R.id.addToCartButton)
         addToCart.setOnClickListener {
             cartViewModel.addItem(coffee)
-
+            requireActivity().findViewById<MaterialCardView>(R.id.bottom_navi_bar)?.visibility = View.GONE
             // switch to CartFragment
             parentFragmentManager.beginTransaction()
                 .setCustomAnimations(
@@ -265,10 +256,10 @@ class DetailsFragment : Fragment() {
             .show()
     }
 
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        requireActivity().findViewById<MaterialCardView>(R.id.bottom_navi_bar)?.visibility = View.VISIBLE
+    override fun onStop() {
+        super.onStop()
+        // save the profile data
+        profileManagement.saveProfile(profile, requireContext())
     }
 
 }

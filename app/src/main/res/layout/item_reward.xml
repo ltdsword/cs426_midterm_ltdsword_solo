@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/foregroundLayout"
+            android:background="@color/white"
+            android:paddingVertical="12dp"
+            android:paddingHorizontal="16dp"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <!-- Order Info and Price -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center_vertical">
+
+
+
+                    <!-- Cup Icon and Coffee Name -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:src="@drawable/baseline_coffee_24"
+                            app:tint="#2D3E50" />
+
+                        <TextView
+                            android:id="@+id/orderTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Americano"
+                            android:textSize="14sp"
+                            android:textColor="#2D3E50"
+                            android:layout_marginStart="6dp"
+                            android:fontFamily="@font/poppinsmed" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/orderDateTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="24 June | 12:30 PM"
+                        android:textColor="#B0B0B0"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/poppins" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/points"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:text="+ 12 Pts"
+                    android:textColor="#2D3E50"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/poppinsmed" />
+
+            </RelativeLayout>
+
+            <!-- Divider -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#EFEFEF"
+                android:layout_marginTop="12dp" />
+        </LinearLayout>
+    </FrameLayout>
+</androidx.cardview.widget.CardView>
+

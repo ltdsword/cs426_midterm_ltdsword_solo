@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class CartBottomSheetFragment : BottomSheetDialogFragment() {
 
-    private lateinit var cartViewModel: CartViewModel
+    private val cartViewModel: CartViewModel by activityViewModels()
     private lateinit var adapter: CartAdapter
 
     override fun onCreateView(
@@ -26,16 +27,20 @@ class CartBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // Shared ViewModel across fragments
-        cartViewModel = ViewModelProvider(requireActivity())[CartViewModel::class.java]
-        val cartItems = cartViewModel.cartItems.value ?: listOf()
-
         val recyclerView = view.findViewById<RecyclerView>(R.id.cartRecyclerView)
-
         // Adapter setup
-        adapter = CartAdapter(cartItems, cartViewModel)
+        adapter = CartAdapter(cartViewModel)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
+
+        // Observe LiveData
+        cartViewModel.cartItems.observe(viewLifecycleOwner) { items ->
+            adapter.submitList(items.toList()) // Make a copy to avoid mutation issues
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        adapter.notifyDataSetChanged()
     }
 }

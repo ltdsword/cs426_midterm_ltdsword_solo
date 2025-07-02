@@ -8,12 +8,15 @@ import android.os.Bundle
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -26,6 +29,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var username: String
     private lateinit var email: String
     private lateinit var profile: Profile
+
+    // cart
+    private val cartViewModel: CartViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,28 +61,22 @@ class MainActivity : AppCompatActivity() {
         val data = getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
         username = data.getString("username", null) ?: return
         val profileManagement = ProfileManagement()
-        lifecycleScope.launch {
-            val profileTemp = profileManagement.getProfile(username)
-            if (profileTemp != null) {
-                profile = profileTemp
-            } else {
-                return@launch
-            }
-            email = profile.email
 
-            // Load the default fragment
-            loadFragment(HomeFragment())
+        profile = profileManagement.getProfileFromLocal(this)
+        email = profile.email
+
+        // Load the default fragment
+        loadFragment(HomeFragment())
+        setSelectedFragment(HomeFragment(), homeIcon)
+
+        homeIcon.setOnClickListener {
             setSelectedFragment(HomeFragment(), homeIcon)
-
-            homeIcon.setOnClickListener {
-                setSelectedFragment(HomeFragment(), homeIcon)
-            }
-            rewardsIcon.setOnClickListener {
-                setSelectedFragment(RewardFragment(), rewardsIcon)
-            }
-            orderIcon.setOnClickListener {
-                setSelectedFragment(OrderFragment(), orderIcon)
-            }
+        }
+        rewardsIcon.setOnClickListener {
+            setSelectedFragment(RewardFragment(), rewardsIcon)
+        }
+        orderIcon.setOnClickListener {
+            setSelectedFragment(OrderFragment(), orderIcon)
         }
     }
 

@@ -32,15 +32,16 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:text="Good morning"
+                    android:text=""
                     android:textColor="#A0A0A0"
                     android:textSize="12sp"
+                    android:id="@+id/greetings"
                     android:fontFamily="@font/poppins"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <TextView
-                    android:text="Anderson"
+                    android:text=""
                     android:textStyle="bold"
                     android:textColor="#1C1C1C"
                     android:id="@+id/nameText"
@@ -191,7 +192,7 @@
             android:fontFamily="@font/poppins"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:paddingHorizontal="16dp"
+            android:paddingHorizontal="24dp"
             android:paddingVertical="12dp" />
 
         <com.google.android.material.card.MaterialCardView

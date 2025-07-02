@@ -30,6 +30,8 @@
         android:layout_height="wrap_content"
         android:background="@drawable/button_rectangle_trans"
         android:hint="Address"
+        android:fontFamily="@font/sfmed"
+        android:gravity="center"
         android:id="@+id/address"
         android:textSize="14sp"
         android:padding="8dp"
@@ -39,7 +41,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="(Ex: 227 Nguyen Van Cu Street, \nDistrict 5, Ho Chi Minh City)"
+        android:text="(Ex: 223 Nguyen Van Cu Street, \nCho Quan Ward, Ho Chi Minh City)"
         android:layout_marginTop="8dp"
         android:fontFamily="@font/poppins"
         android:textSize="14sp"

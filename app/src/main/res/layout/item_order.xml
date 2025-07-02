@@ -22,14 +22,14 @@
             app:tint="@color/green"
             android:background="@drawable/round_border_red"
             android:gravity="center"
-            android:layout_marginStart="4dp" />
+             />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:id="@+id/foregroundLayout"
-            android:background="#F7F8FB"
+            android:background="@color/white"
             android:paddingVertical="12dp"
             android:paddingHorizontal="16dp"
             >

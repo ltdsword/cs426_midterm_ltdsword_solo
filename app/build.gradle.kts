@@ -41,14 +41,12 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "SENDGRID_API_KEY", "\"$escapedSendgridKey\"")
+            buildConfigField("String", "SENDGRID_API_KEY", "\"your_actual_key_here\"")
         }
         release {
+            buildConfigField("String", "SENDGRID_API_KEY", "\"your_actual_key_here\"")
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
     compileOptions {

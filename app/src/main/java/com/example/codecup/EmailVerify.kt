@@ -85,6 +85,63 @@ class EmailVerify {
     }
 
 
+    fun sendOrderSuccessEmail(toEmail: String, cartItems: List<Coffee>, totalPrice: Int, context: Context) {
+        val apiKey = (context.applicationContext as MyApplication).sharedPreferences
+            .getString("API_KEY", null) ?: return
+
+        Log.d("Email", "Api Key: ${apiKey.substring(0, 10)}")
+
+        val fromEmail = "ltdsword12@gmail.com"
+
+        // Build HTML order summary with details
+        val orderSummary = buildString {
+            append("<h3>Thank you for your order!</h3>")
+            append("<p>Here is a summary of your order:</p>")
+            append("<ul>")
+            for (item in cartItems) {
+                val details = "${if (item.single) "single" else "double"} | ${if (item.hot) "hot" else "iced"} | ${getSizeLabel(item.size)} | ${getIceLabel(item.ice)}"
+                append("<li>${item.qty} × ${item.name} ($details) - \$${"%.2f".format(item.price * item.qty)}</li>")
+            }
+            append("</ul>")
+            append("<p><strong>Total Price:</strong> \$${"%.2f".format(totalPrice)}</p>")
+        }
+
+        // Build SendGrid payload
+        val jsonObject = JSONObject().apply {
+            put("personalizations", JSONArray().put(JSONObject().apply {
+                put("to", JSONArray().put(JSONObject().put("email", toEmail)))
+                put("subject", "Order Confirmation - CodeCup")
+            }))
+            put("from", JSONObject().put("email", fromEmail))
+            put("content", JSONArray().put(JSONObject().apply {
+                put("type", "text/html")
+                put("value", orderSummary)
+            }))
+        }
+
+        val client = OkHttpClient()
+        val request = Request.Builder()
+            .url("https://api.sendgrid.com/v3/mail/send")
+            .addHeader("Authorization", "Bearer $apiKey")
+            .addHeader("Content-Type", "application/json")
+            .post(jsonObject.toString().toRequestBody("application/json".toMediaTypeOrNull()))
+            .build()
+
+        client.newCall(request).enqueue(object : Callback {
+            override fun onFailure(call: okhttp3.Call, e: IOException) {
+                Log.e("Email", "Fail to send email")
+                e.printStackTrace()
+            }
+
+            override fun onResponse(call: okhttp3.Call, response: Response) {
+                val responseBody = response.body?.string() ?: "No response body"
+                Log.d("Email", "Response: $responseBody")
+            }
+        })
+    }
+
+
+
     fun showEmailVerificationDialog(context: Context, toEmail: String, onSuccess: (Boolean) -> Unit) {
         var correctCode = generateVerificationCode()
         sendVerificationEmail(toEmail, correctCode, context)
