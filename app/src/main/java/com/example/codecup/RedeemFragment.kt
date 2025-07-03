@@ -3,6 +3,7 @@ package com.example.codecup
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -82,7 +83,6 @@ class RedeemFragment : Fragment() {
     override fun onStop() {
         super.onStop()
         // save the profile data
-        profileManagement.saveProfile(profile, requireContext())
     }
 }
 
@@ -121,9 +121,10 @@ class RedeemAdapter(private val items: List<RedeemItem>) :
                     .setMessage("Redeem ${item.name} for ${item.requiredPoints} points?")
                     .setPositiveButton("Yes") { _, _ ->
                         // Proceed with redemption
+                        Log.d("RedeemAdapter", "Redeeming ${item.name}, Init points: ${profile.points}")
                         profile.points -= item.requiredPoints
                         profileManagement.saveProfile(profile, holder.itemView.context)
-
+                        Log.d("RedeemAdapter", "Final points: ${profile.points}")
                         Toast.makeText(holder.itemView.context, "Redeemed ${item.name}!", Toast.LENGTH_SHORT).show()
                     }
                     .setNegativeButton("Cancel", null)

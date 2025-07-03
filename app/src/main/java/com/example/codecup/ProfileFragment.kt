@@ -20,6 +20,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.card.MaterialCardView
 import java.io.File
 
@@ -30,6 +31,8 @@ class ProfileFragment : Fragment() {
     private val profileManagement = ProfileManagement()
     private val uploadImage = UploadImage()
     private lateinit var imageView: ImageView
+
+    private val cartViewModel: CartViewModel by activityViewModels()
 
     private val imagePickerLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
         uri?.let {
@@ -84,6 +87,7 @@ class ProfileFragment : Fragment() {
                 .setTitle("Confirm Logout")
                 .setMessage("Are you sure you want to log out?")
                 .setPositiveButton("Yes") { _, _ ->
+
                     // Clear SharedPreferences
                     val sharedPref = requireContext().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
                     with(sharedPref.edit()) {
@@ -92,6 +96,10 @@ class ProfileFragment : Fragment() {
                         putBoolean("isLoggedIn", false)
                         apply()
                     }
+
+                    // Clear cart
+                    cartViewModel.cartItems.value?.clear()
+                    cartViewModel.saveCartToPrefs()
 
                     // Finish current activity and start LoginActivity
                     val intent = Intent(requireContext(), LoginActivity::class.java)

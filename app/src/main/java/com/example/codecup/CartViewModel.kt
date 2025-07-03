@@ -3,6 +3,7 @@ package com.example.codecup
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -39,18 +40,27 @@ class CartViewModel : ViewModel() {
         }
     }
 
-    private fun saveCartToPrefs() {
+    fun saveCartToPrefs() {
         val json = Gson().toJson(_cartItems.value ?: emptyList<Coffee>())
+
+        Log.d("CartViewModel", "Saving cart to SharedPreferences: $json")
+
         sharedPrefs.edit().putString("cart", json).apply()
     }
 
     fun loadCartFromPrefs() {
         val json = sharedPrefs.getString("cart", null)
+        Log.d("CartViewModel", "Loading cart from SharedPreferences: $json")
         if (json != null) {
             val type = object : TypeToken<MutableList<Coffee>>() {}.type
             val list: MutableList<Coffee> = Gson().fromJson(json, type)
             _cartItems.value = list
+            delCartInPrefs()
         }
+    }
+
+    private fun delCartInPrefs() {
+        sharedPrefs.edit().remove("cart").apply()
     }
 
     override fun onCleared() {

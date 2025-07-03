@@ -67,16 +67,13 @@ class DetailsFragment : Fragment() {
 
         profile = profileManagement.getProfileFromLocal(requireContext())
 
-        // load cart
-        cartViewModel.initSharedPrefs(requireContext())
-        cartViewModel.loadCartFromPrefs()
-
         setupUI(view)
     }
 
     private lateinit var qtyText: TextView
     private lateinit var addButton: TextView
     private lateinit var subtractButton: TextView
+    private lateinit var coffeeName: TextView
 
     private fun setupImageUI(view: View) {
         // Hide bottom navigation
@@ -84,6 +81,10 @@ class DetailsFragment : Fragment() {
         // Set image
         val coffeeImage = view.findViewById<ImageView>(R.id.coffeeImage)
         coffeeImage.setImageResource(coffee.imageResId)
+
+        // Set name
+        val coffeeName = view.findViewById<TextView>(R.id.coffeeName)
+        coffeeName.text = coffee.name
 
         // Quantity
         qtyText = view.findViewById<TextView>(R.id.qty)
@@ -168,6 +169,8 @@ class DetailsFragment : Fragment() {
             sizeSmall.alpha = if (coffee.size == 0) 1f else 0.3f
             sizeMed.alpha = if (coffee.size == 1) 1f else 0.3f
             sizeBig.alpha = if (coffee.size == 2) 1f else 0.3f
+
+            updatePrice(view)
         }
 
         sizeSmall.setOnClickListener {
@@ -214,13 +217,12 @@ class DetailsFragment : Fragment() {
         }
 
         updateIceUI()
-
+        updatePrice(view)
 
         // Add to Cart
         val addToCart = view.findViewById<Button>(R.id.addToCartButton)
         addToCart.setOnClickListener {
             cartViewModel.addItem(coffee)
-            requireActivity().findViewById<MaterialCardView>(R.id.bottom_navi_bar)?.visibility = View.GONE
             // switch to CartFragment
             parentFragmentManager.beginTransaction()
                 .setCustomAnimations(
@@ -233,11 +235,18 @@ class DetailsFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
-
-        updatePrice(view)
     }
 
     private fun updatePrice(view: View) {
+        if (coffee.size == 1) {
+            coffee.price = coffee.priceMed
+        }
+        else if (coffee.size == 2) {
+            coffee.price = coffee.priceBig
+        }
+        else {
+            coffee.price = coffee.priceSmall
+        }
         val totalPrice = coffee.price * coffee.qty
         val priceText = view.findViewById<TextView>(R.id.totalPrice)
         priceText.text = "$%.2f".format(totalPrice)

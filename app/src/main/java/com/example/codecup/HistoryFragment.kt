@@ -36,10 +36,4 @@ class HistoryFragment : Fragment() {
         val updated = profileManagement.getProfileFromLocal(requireContext()).history.hist
         histAdapter.updateData(updated)
     }
-
-    override fun onStop() {
-        super.onStop()
-        // save the profile data
-        profileManagement.saveProfile(profile, requireContext())
-    }
 }

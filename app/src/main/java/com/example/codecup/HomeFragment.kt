@@ -49,9 +49,6 @@ class HomeFragment : Fragment() {
         requireActivity().findViewById<MaterialCardView>(R.id.bottom_navi_bar)?.visibility = View.VISIBLE
 
         profile = profileManagement.getProfileFromLocal(requireContext())
-        // load cart
-        cartViewModel.initSharedPrefs(requireContext())
-        cartViewModel.loadCartFromPrefs()
 
         setupUI(view)
     }

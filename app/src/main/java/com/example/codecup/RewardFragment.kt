@@ -99,8 +99,6 @@ class RewardFragment : Fragment() {
 class RewardAdapter(private val rewards: List<Order>) :
     RecyclerView.Adapter<RewardAdapter.RewardViewHolder>() {
 
-    private val redeemPts = getRedeemPoints()
-
     class RewardViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView = view.findViewById(R.id.orderTitle)
         val dateTime: TextView = view.findViewById(R.id.orderDateTime)
@@ -118,7 +116,7 @@ class RewardAdapter(private val rewards: List<Order>) :
         holder.title.text = reward.name
         holder.dateTime.text = formatDate(reward.date)
 
-        val totalRedeemPts = (redeemPts[reward.name] ?: 0) * reward.qty
+        val totalRedeemPts = getRedeemPoints(reward.price) * reward.qty
         holder.points.text = "+ ${totalRedeemPts} Pts"
     }
 

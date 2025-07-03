@@ -1,18 +1,14 @@
 package com.example.codecup
 import android.app.AlertDialog
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import com.example.codecup.R
 import com.google.firebase.Timestamp
 import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
 import okhttp3.OkHttpClient
@@ -85,7 +81,7 @@ class EmailVerify {
     }
 
 
-    fun sendOrderSuccessEmail(toEmail: String, cartItems: List<Coffee>, totalPrice: Int, context: Context) {
+    fun sendOrderSuccessEmail(toEmail: String, cartItems: List<Coffee>, totalPrice: Double, context: Context) {
         val apiKey = (context.applicationContext as MyApplication).sharedPreferences
             .getString("API_KEY", null) ?: return
 

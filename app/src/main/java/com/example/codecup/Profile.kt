@@ -16,7 +16,10 @@ data class Coffee(val name: String,
                   var single: Boolean = true,
                   var hot: Boolean = true,
                   var size: Int = 0,
-                  var ice: Int = 0
+                  var ice: Int = 0,
+                  var priceSmall: Double = 0.00,
+                  var priceMed: Double = 0.00,
+                  var priceBig: Double = 0.00
                   ): Parcelable
 
 @Keep
