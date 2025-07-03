@@ -314,7 +314,7 @@ fun getSizeLabel(size: Int) = when (size) {
     0 -> "small"; 1 -> "medium"; else -> "large"
 }
 fun getIceLabel(ice: Int) = when (ice) {
-    0 -> "little ice"; 1 -> "medium ice"; 2 -> "full ice"; else -> "unknown"
+    0 -> "little ice"; 1 -> "medium ice"; 2 -> "full ice"; -1 -> "no ice"; else -> "unknown"
 }
 
 // DiffUtil calculates the difference between two lists and enables animations

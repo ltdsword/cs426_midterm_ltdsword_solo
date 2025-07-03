@@ -148,16 +148,6 @@ class DetailsFragment : Fragment() {
             coldImage.alpha = if (coffee.hot) 0.3f else 1f
         }
 
-        hotImage.setOnClickListener {
-            coffee.hot = true
-            updateHotColdUI()
-        }
-
-        coldImage.setOnClickListener {
-            coffee.hot = false
-            updateHotColdUI()
-        }
-
         updateHotColdUI()
 
         // Size selection (0 = small, 1 = med, 2 = big)
@@ -194,6 +184,31 @@ class DetailsFragment : Fragment() {
         val ice0 = view.findViewById<ImageView>(R.id.little)
         val ice1 = view.findViewById<ImageView>(R.id.medium)
         val ice2 = view.findViewById<ImageView>(R.id.full)
+
+        hotImage.setOnClickListener {
+            // cannot choose ice
+            coffee.hot = true
+            ice0.isEnabled = false
+            ice1.isEnabled = false
+            ice2.isEnabled = false
+            coffee.ice = -1
+            ice0.alpha = 0.3f
+            ice1.alpha = 0.3f
+            ice2.alpha = 0.3f
+            updateHotColdUI()
+        }
+
+        coldImage.setOnClickListener {
+            coffee.hot = false
+            ice0.isEnabled = true
+            ice1.isEnabled = true
+            ice2.isEnabled = true
+            coffee.ice = 1
+            ice0.alpha = 1.0f
+            ice1.alpha = 0.3f
+            ice2.alpha = 0.3f
+            updateHotColdUI()
+        }
 
         fun updateIceUI() {
             ice0.alpha = if (coffee.ice == 0) 1f else 0.3f
