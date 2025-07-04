@@ -22,6 +22,10 @@ class CartViewModel : ViewModel() {
         cart.sumOf { coffee -> coffee.price * coffee.qty }
     }
 
+    fun notifyChange() {
+        _cartItems.value = _cartItems.value?.toMutableList()
+    }
+
     fun initSharedPrefs(context: Context) {
         sharedPrefs = context.getSharedPreferences("CartPrefs", Application.MODE_PRIVATE)
     }
@@ -52,9 +56,7 @@ class CartViewModel : ViewModel() {
 
     fun saveCartToPrefs() {
         val json = Gson().toJson(_cartItems.value ?: emptyList<Coffee>())
-
         Log.d("CartViewModel", "Saving cart to SharedPreferences: $json")
-
         sharedPrefs.edit().putString("cart", json).apply()
     }
 

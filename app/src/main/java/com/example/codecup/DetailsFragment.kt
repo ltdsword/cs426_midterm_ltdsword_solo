@@ -257,6 +257,7 @@ class DetailsFragment : Fragment() {
         addToCart.setOnClickListener {
             if (isModifying) {
                 cartViewModel.updateItem(oldCoffee, coffee)
+                cartViewModel.notifyChange()
             } else {
                 cartViewModel.addItem(coffee)
             }

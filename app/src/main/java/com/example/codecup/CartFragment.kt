@@ -56,6 +56,7 @@ class CartFragment : Fragment() {
         adapter = CartAdapter(cartViewModel) { selectedCoffee ->
             navigateToDetails(selectedCoffee)
         }
+
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
 
