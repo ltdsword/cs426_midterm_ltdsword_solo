@@ -5,7 +5,6 @@ import androidx.annotation.Keep
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Exclude
 import kotlinx.parcelize.Parcelize
-import java.util.Date
 
 @Keep
 @Parcelize
@@ -37,16 +36,6 @@ data class History(
     @Exclude
     fun addObject(name: String, price: Double, qty: Int, ltypts: Int, address: String) {
         hist = hist + Order(name, price, qty, ltypts, Timestamp.now(), address)
-    }
-
-    @Exclude
-    fun clear() {
-        hist = emptyList()
-    }
-
-    @Exclude
-    fun getList(): List<Order> {
-        return hist
     }
 }
 

@@ -1,27 +1,16 @@
 package com.example.codecup
 
-import android.app.Application
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.Timestamp
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -29,9 +18,6 @@ import java.util.Locale
 class HomeFragment : Fragment() {
 
     private lateinit var coffeeRecyclerView: RecyclerView
-    private val cartViewModel: CartViewModel by activityViewModels()
-
-    private lateinit var username: String
     private lateinit var profile: Profile
 
     private val profileManagement = ProfileManagement()
@@ -172,33 +158,4 @@ class HomeFragment : Fragment() {
         // save the profile data
         profileManagement.saveProfile(profile, requireContext())
     }
-}
-
-class CoffeeAdapter(
-    private val items: List<Coffee>,
-    private val onItemClick: (Coffee) -> Unit
-) : RecyclerView.Adapter<CoffeeAdapter.CoffeeViewHolder>() {
-
-    inner class CoffeeViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val image: ImageView = view.findViewById(R.id.coffeeImage)
-        val name: TextView = view.findViewById(R.id.coffeeName)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoffeeViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_coffee, parent, false)
-        return CoffeeViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: CoffeeViewHolder, position: Int) {
-        val item = items[position]
-        holder.image.setImageResource(item.imageResId)
-        holder.name.text = item.name
-
-        holder.itemView.setOnClickListener {
-            onItemClick(item)
-        }
-    }
-
-    override fun getItemCount(): Int = items.size
 }

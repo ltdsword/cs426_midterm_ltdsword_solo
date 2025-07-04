@@ -29,11 +29,8 @@ class ProfileManagement {
         val db = FirebaseFirestore.getInstance()
         db.collection("users").document(username).get()
             .addOnSuccessListener { document ->
-                Log.d("Firestore", "Line 30, Fetching profile for username: $username")
                 if (document.exists()) {
-                    Log.d("Firestore", "Data: ${document.data}") // Debugging
                     val profile = document.toObject(Profile::class.java)
-                    Log.d("Firestore", "Profile: $profile")
                     if (profile == null) {
                         Log.e("Firestore", "Failed to deserialize Profile")
                     }

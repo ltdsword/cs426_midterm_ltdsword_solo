@@ -1,7 +1,6 @@
 package com.example.codecup
 
 import android.app.AlertDialog
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -20,23 +19,29 @@ class DetailsFragment : Fragment() {
 
     companion object {
         const val ARG_COFFEE = "arg_coffee"
+        const val ARG_IS_MODIFYING = "arg_is_modifying"
     }
 
     // coffee object
     private lateinit var coffee: Coffee
+    private lateinit var oldCoffee: Coffee
     private val cartViewModel: CartViewModel by activityViewModels()
 
-    private lateinit var username: String
     private lateinit var profile: Profile
-
     private val profileManagement = ProfileManagement()
+
+    // is modifying the cart or not
+    private var isModifying = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         coffee = arguments?.getParcelable(ARG_COFFEE)
             ?: throw IllegalArgumentException("Coffee must not be null")
 
+        oldCoffee = coffee.copy()
+
         // we assign the coffee obj with the params
+        isModifying = arguments?.getBoolean(ARG_IS_MODIFYING, false) ?: false
     }
 
     override fun onCreateView(
@@ -83,13 +88,13 @@ class DetailsFragment : Fragment() {
         coffeeImage.setImageResource(coffee.imageResId)
 
         // Set name
-        val coffeeName = view.findViewById<TextView>(R.id.coffeeName)
+        coffeeName = view.findViewById<TextView>(R.id.coffeeName)
         coffeeName.text = coffee.name
 
         // Quantity
-        qtyText = view.findViewById<TextView>(R.id.qty)
-        addButton = view.findViewById<TextView>(R.id.add)
-        subtractButton = view.findViewById<TextView>(R.id.subtract)
+        qtyText = view.findViewById(R.id.qty)
+        addButton = view.findViewById(R.id.add)
+        subtractButton = view.findViewById(R.id.subtract)
         qtyText.text = coffee.qty.toString()
 
         val cart = view.findViewById<ImageView>(R.id.cartButton)
@@ -203,7 +208,7 @@ class DetailsFragment : Fragment() {
             ice0.isEnabled = true
             ice1.isEnabled = true
             ice2.isEnabled = true
-            coffee.ice = 1
+            coffee.ice = 0
             ice0.alpha = 1.0f
             ice1.alpha = 0.3f
             ice2.alpha = 0.3f
@@ -211,9 +216,17 @@ class DetailsFragment : Fragment() {
         }
 
         fun updateIceUI() {
-            ice0.alpha = if (coffee.ice == 0) 1f else 0.3f
-            ice1.alpha = if (coffee.ice == 1) 1f else 0.3f
-            ice2.alpha = if (coffee.ice == 2) 1f else 0.3f
+            if (coffee.hot) {
+                ice0.alpha = 0.3f
+                ice1.alpha = 0.3f
+                ice2.alpha = 0.3f
+                coffee.ice = -1
+            }
+            else {
+                ice0.alpha = if (coffee.ice == 0) 1f else 0.3f
+                ice1.alpha = if (coffee.ice == 1) 1f else 0.3f
+                ice2.alpha = if (coffee.ice == 2) 1f else 0.3f
+            }
         }
 
         ice0.setOnClickListener {
@@ -236,8 +249,17 @@ class DetailsFragment : Fragment() {
 
         // Add to Cart
         val addToCart = view.findViewById<Button>(R.id.addToCartButton)
+        val titleTextView = view.findViewById<TextView>(R.id.titleText)
+        if (isModifying) {
+            addToCart.text = "Modify this coffee"
+            titleTextView.text = "Modify"
+        }
         addToCart.setOnClickListener {
-            cartViewModel.addItem(coffee)
+            if (isModifying) {
+                cartViewModel.updateItem(oldCoffee, coffee)
+            } else {
+                cartViewModel.addItem(coffee)
+            }
             // switch to CartFragment
             parentFragmentManager.beginTransaction()
                 .setCustomAnimations(

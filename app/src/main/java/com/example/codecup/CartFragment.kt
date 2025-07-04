@@ -9,15 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 class CartFragment : Fragment() {
@@ -30,6 +27,7 @@ class CartFragment : Fragment() {
 
     private var address: String = ""
 
+    // for the swipe activity
     private var swipedViewHolder: RecyclerView.ViewHolder? = null
 
     override fun onCreateView(
@@ -47,13 +45,17 @@ class CartFragment : Fragment() {
             }
         })
 
+        profile = profileManagement.getProfileFromLocal(requireContext())
+
         val recyclerView = view.findViewById<RecyclerView>(R.id.cartRecyclerView)
         val totalPriceText = view.findViewById<TextView>(R.id.totalPrice)
         val checkoutButton = view.findViewById<Button>(R.id.checkoutButton)
         val backButton = view.findViewById<ImageButton>(R.id.backButton)
 
 
-        adapter = CartAdapter(cartViewModel) // Simplified constructor
+        adapter = CartAdapter(cartViewModel) { selectedCoffee ->
+            navigateToDetails(selectedCoffee)
+        }
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.adapter = adapter
 
@@ -70,7 +72,6 @@ class CartFragment : Fragment() {
             navigateBackToHome()
         }
 
-        profile = profileManagement.getProfileFromLocal(requireContext())
 
         // check out: save data....
         checkoutButton.setOnClickListener {
@@ -89,6 +90,26 @@ class CartFragment : Fragment() {
                 }
             }
         })
+    }
+
+    private fun navigateToDetails(coffee: Coffee) {
+        val fragment = DetailsFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable(DetailsFragment.ARG_COFFEE, coffee)
+                putBoolean(DetailsFragment.ARG_IS_MODIFYING, true)
+            }
+        }
+
+        parentFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                R.anim.slide_in_right,
+                R.anim.slide_out_left,
+                R.anim.slide_in_left,
+                R.anim.slide_out_right
+            )
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     override fun onStop() {
@@ -167,12 +188,12 @@ class CartFragment : Fragment() {
         var totalPrice = 0.00
         for (o in cartItems) {
             // save order to history
-            val ltypts = getRedeemPoints(o.price)
-            profile.ongoing.addObject(o.name, o.price*o.qty, o.qty, o.qty*ltypts, address)
+            val rdpts = getRedeemPoints(o.price * o.qty)
+            profile.ongoing.addObject(o.name, o.price*o.qty, o.qty, rdpts, address)
             profile.loyaltyPts += o.qty
             profile.loyaltyPts %= 8
 
-            profile.points += ltypts * o.qty
+            profile.points += rdpts
             totalPrice += o.price*o.qty
         }
 
@@ -189,142 +210,90 @@ class CartFragment : Fragment() {
     }
 
     private fun attachSwipeToDelete(recyclerView: RecyclerView) {
-        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
             override fun onMove(
-                recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder
-            ): Boolean {
-                return false
-            }
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ) = false
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                // Not used
+
             }
 
             override fun onChildDraw(
-                c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
-                dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean
+                c: Canvas,
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                dX: Float,
+                dY: Float,
+                actionState: Int,
+                isCurrentlyActive: Boolean
             ) {
                 if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-                    // Close any other open item if we start swiping a new one.
                     if (isCurrentlyActive && swipedViewHolder != null && swipedViewHolder != viewHolder) {
                         closeSwipedItem()
                     }
 
-                    val foregroundView = viewHolder.itemView.findViewById<View>(R.id.foregroundLayout)
+                    val foreground = viewHolder.itemView.findViewById<View>(R.id.foregroundLayout)
                     val deleteButton = viewHolder.itemView.findViewById<View>(R.id.deleteButton)
                     val buttonWidth = deleteButton.width.toFloat()
 
-                    // Manually set translation on the foreground view only.
-                    // The new dX is calculated based on the initial position to allow swiping from an open state.
-                    val newDx = foregroundView.translationX + dX
-                    foregroundView.translationX = newDx.coerceIn(-buttonWidth, 0f)
+                    deleteButton.isEnabled = false
+                    deleteButton.isClickable = false
 
+                    val newDx = foreground.translationX + dX
+                    foreground.translationX = newDx.coerceIn(-buttonWidth, 0f)
+
+                    if (foreground.translationX <= -buttonWidth) {
+                        deleteButton.isEnabled = true
+                        deleteButton.isClickable = true
+                    } else {
+                        deleteButton.isEnabled = false
+                        deleteButton.isClickable = false
+                    }
                 } else {
                     super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                 }
             }
 
             override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
-                val foregroundView = viewHolder.itemView.findViewById<View>(R.id.foregroundLayout)
+                val foreground = viewHolder.itemView.findViewById<View>(R.id.foregroundLayout)
                 val deleteButton = viewHolder.itemView.findViewById<View>(R.id.deleteButton)
                 val buttonWidth = deleteButton.width.toFloat()
 
+                deleteButton.isEnabled = false
+                deleteButton.isClickable = false
+
                 if (swipedViewHolder == viewHolder) {
-                    // If it's open, you must swipe RIGHT past the threshold to close it.
                     val closeThreshold = buttonWidth * 0.7f
-                    // We check if the translation has moved far enough to the right (is greater than -closeThreshold)
-                    if (foregroundView.translationX > -closeThreshold) {
-                        closeSwipedItem() // Animate it closed and clear state.
+                    if (foreground.translationX > -closeThreshold) {
+                        closeSwipedItem()
                     } else {
-                        // Not swiped far enough right, so snap it back to the fully open state.
-                        foregroundView.animate().translationX(-buttonWidth).setDuration(200).start()
+                        foreground.animate().translationX(-buttonWidth).setDuration(200).start()
+                        deleteButton.isEnabled = true
                     }
-                } else { // This item was not the one that was open.
+                } else {
                     val openThreshold = buttonWidth * 0.3f
-                    if (foregroundView.translationX < -openThreshold) {
-                        foregroundView.animate().translationX(-buttonWidth).setDuration(200).start()
+                    if (foreground.translationX < -openThreshold) {
+                        foreground.animate().translationX(-buttonWidth).setDuration(200).start()
+                        deleteButton.isEnabled = true
                         swipedViewHolder = viewHolder
                     } else {
-                        // Not swiped far enough left, so snap it fully closed.
-                        foregroundView.translationX = 0f
+                        foreground.translationX = 0f
+                        deleteButton.isEnabled = false
                     }
                 }
             }
 
-            // Disable the default dismissal behavior.
             override fun getSwipeThreshold(viewHolder: RecyclerView.ViewHolder): Float {
                 return Float.MAX_VALUE
             }
         }
+
         ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(recyclerView)
     }
 }
 
-
-class CartAdapter(
-    private val cartViewModel: CartViewModel
-) : ListAdapter<Coffee, CartAdapter.CartViewHolder>(CoffeeDiffCallback()) {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_cart, parent, false)
-        return CartViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
-        val item = getItem(position)
-        holder.bind(item, cartViewModel)
-
-        holder.itemView.findViewById<ImageButton>(R.id.deleteButton).setOnClickListener {
-            cartViewModel.removeItem(item)
-            notifyItemRemoved(position)
-        }
-    }
-
-    class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val coffeeName = itemView.findViewById<TextView>(R.id.name)
-        private val coffeeDetails = itemView.findViewById<TextView>(R.id.details)
-        private val coffeeQty = itemView.findViewById<TextView>(R.id.qty)
-        private val coffeePrice = itemView.findViewById<TextView>(R.id.price)
-        private val coffeeImage = itemView.findViewById<ImageView>(R.id.image)
-        private val deleteButton = itemView.findViewById<ImageButton>(R.id.deleteButton)
-        private val foregroundLayout = itemView.findViewById<View>(R.id.foregroundLayout)
-
-        fun bind(item: Coffee, cartViewModel: CartViewModel) {
-            coffeeName.text = item.name
-            coffeeQty.text = "x ${item.qty}"
-            coffeePrice.text = String.format("$%.2f", item.price * item.qty)
-            coffeeDetails.text =
-                "${if (item.single) "single" else "double"} | ${if (item.hot) "hot" else "iced"} | ${getSizeLabel(item.size)} | ${getIceLabel(item.ice)}"
-            coffeeImage.setImageResource(item.imageResId)
-
-            deleteButton.setOnClickListener {
-                // Animate the view back to hide the button before removing
-                foregroundLayout.animate()
-                    .translationX(0f)
-                    .setDuration(200)
-                    .start()
-            }
-        }
-    }
-}
-
-fun getSizeLabel(size: Int) = when (size) {
-    0 -> "small"; 1 -> "medium"; else -> "large"
-}
-fun getIceLabel(ice: Int) = when (ice) {
-    0 -> "little ice"; 1 -> "medium ice"; 2 -> "full ice"; -1 -> "no ice"; else -> "unknown"
-}
-
-// DiffUtil calculates the difference between two lists and enables animations
-class CoffeeDiffCallback : DiffUtil.ItemCallback<Coffee>() {
-    override fun areItemsTheSame(oldItem: Coffee, newItem: Coffee): Boolean {
-        return oldItem == newItem
-    }
-
-    override fun areContentsTheSame(oldItem: Coffee, newItem: Coffee): Boolean {
-        return oldItem == newItem
-    }
-}
 

@@ -29,20 +29,6 @@ fun getRedeemPointsNeeded(): Map<String, Int> {
     return redeemPoints
 }
 
-fun getRedeemPoints(): Map<String, Int> {
-    val rp = mapOf(
-        "Americano" to 25,
-        "Cappuccino" to 25,
-        "Latte" to 30,
-        "Mocha" to 30,
-        "Espresso" to 35,
-        "Flat White" to 35,
-        "Hot Chocolate" to 40,
-        "Cortado" to 40
-    )
-    return rp
-}
-
 fun getRedeemPoints(price: Double) : Int {
-    return price.toInt() * 10
+    return (price * 10.0).toInt()
 }

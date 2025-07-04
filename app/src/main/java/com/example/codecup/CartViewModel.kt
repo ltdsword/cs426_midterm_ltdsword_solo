@@ -33,6 +33,16 @@ class CartViewModel : ViewModel() {
         }
     }
 
+    fun updateItem(old: Coffee, new: Coffee) {
+        _cartItems.value?.let { list ->
+            val index = list.indexOf(old)
+            if (index != -1) {
+                list[index] = new
+                _cartItems.value = list.toMutableList()
+            }
+        }
+    }
+
     fun removeItem(coffee: Coffee) {
         _cartItems.value?.let {
             it.remove(coffee)

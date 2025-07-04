@@ -1,6 +1,5 @@
 package com.example.codecup
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,23 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
-import com.google.firebase.Timestamp
-import com.google.gson.Gson
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+
 
 class RewardFragment : Fragment() {
 
-    private lateinit var username: String
     private lateinit var profile: Profile
 
     private val profileManagement = ProfileManagement()
@@ -83,9 +72,12 @@ class RewardFragment : Fragment() {
 
         val totalOrder = profile.ongoing.hist + profile.history.hist
 
+        // sort by date
+        val sortedOrder = totalOrder.toMutableList().sortedByDescending { it.date }
+
         val rewardRecycler = view.findViewById<RecyclerView>(R.id.coffeeRecyclerView)
         rewardRecycler.layoutManager = LinearLayoutManager(requireContext())
-        rewardAdapter = RewardAdapter(totalOrder)
+        rewardAdapter = RewardAdapter(sortedOrder)
         rewardRecycler.adapter = rewardAdapter
     }
 
@@ -93,38 +85,6 @@ class RewardFragment : Fragment() {
         super.onStop()
         // save the profile data
         profileManagement.saveProfile(profile, requireContext())
-    }
-}
-
-class RewardAdapter(private val rewards: List<Order>) :
-    RecyclerView.Adapter<RewardAdapter.RewardViewHolder>() {
-
-    class RewardViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val title: TextView = view.findViewById(R.id.orderTitle)
-        val dateTime: TextView = view.findViewById(R.id.orderDateTime)
-        val points: TextView = view.findViewById(R.id.points)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RewardViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_reward, parent, false)
-        return RewardViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: RewardViewHolder, position: Int) {
-        val reward = rewards[position]
-        holder.title.text = reward.name
-        holder.dateTime.text = formatDate(reward.date)
-
-        val totalRedeemPts = getRedeemPoints(reward.price) * reward.qty
-        holder.points.text = "+ ${totalRedeemPts} Pts"
-    }
-
-    override fun getItemCount(): Int = rewards.size
-
-    private fun formatDate(timestamp: Timestamp): String {
-        val sdf = SimpleDateFormat("dd MMMM | hh:mm a", Locale.getDefault())
-        return sdf.format(timestamp.toDate())
     }
 }
 

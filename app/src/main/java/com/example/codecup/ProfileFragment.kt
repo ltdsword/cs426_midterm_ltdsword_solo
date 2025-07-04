@@ -121,13 +121,32 @@ class ProfileFragment : Fragment() {
         setupEditableField(
             editIcon = editName,
             editText = fullNameText,
-            onSave = { newText ->
-                if (profile.name != newText) {
-                    uploadImage.renameUserAvatarFolder(profile.name, newText) { success ->
-                        if (success) {
-                            profile.name = newText
-                            profileManagement.saveProfile(profile, requireContext())
+            onSave = { newUsername ->
+                val oldName = profile.name
+                profileManagement.isUsernameTaken(newUsername) { exist ->
+                    if (exist) {
+                        Toast.makeText(requireContext(), "Username already exists", Toast.LENGTH_SHORT).show()
+                    }
+                    else if (!profileManagement.isLegalUsername(newUsername)) {
+                        Toast.makeText(requireContext(), "Username must not have special characters!", Toast.LENGTH_SHORT).show()
+                    }
+                    else {
+                        profile.name = newUsername
+                        profileManagement.saveProfile(profile, requireContext())
+                        profileManagement.deleteUsername(oldName)
+
+                        // move urls in old username to new username
+                        val uploadImage =  UploadImage()
+                        uploadImage.renameUserAvatarFolder(oldName, newUsername) { success ->
+                            if (success) {
+                                Log.d("AvatarRename", "Rename completed successfully")
+                            } else {
+                                Log.e("AvatarRename", "Rename failed")
+                            }
                         }
+
+                        Toast.makeText(requireContext(), "Username changed successfully", Toast.LENGTH_SHORT).show()
+
                     }
                 }
             }
